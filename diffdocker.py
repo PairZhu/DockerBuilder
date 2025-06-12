@@ -17,6 +17,7 @@ def image_export(client, image_id, dst_path):
 
         # 创建临时 tar 文件
         with tempfile.NamedTemporaryFile(delete=False) as tmp_tar:
+            print(f"导出镜像{image_id} 到临时文件: {tmp_tar.name}")
             for chunk in image_stream:
                 tmp_tar.write(chunk)
             tmp_tar_path = tmp_tar.name
