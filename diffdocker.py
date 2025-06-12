@@ -118,6 +118,7 @@ def main():
         prog="dockerdiff", description="Docker 镜像层去重工具"
     )
 
+    parser.add_argument("--tempdir", help="指定临时文件存放路径")
     subparsers = parser.add_subparsers(dest="command", help="可用命令")
 
     # save 子命令
@@ -134,6 +135,13 @@ def main():
     if args.command == "version":
         print(VERSION)
         return
+
+    # 如果指定了tempdir，设置临时文件路径
+    if args.tempdir:
+        if not os.path.exists(args.tempdir):
+            os.makedirs(args.tempdir)
+        tempfile.tempdir = args.tempdir
+        print(f"临时文件将保存在: {args.tempdir}")
 
     if args.command == "save":
         # 初始化 Docker 客户端
