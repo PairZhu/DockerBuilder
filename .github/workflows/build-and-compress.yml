@@ -13,8 +13,6 @@ jobs:
           df -h
           pwd
           ls -l
-          # 先报错退出
-          exit 1
 
       - uses: actions/checkout@v4
 
@@ -42,9 +40,9 @@ jobs:
 
       - name: Export and compress image
         run: |
-          mkdir -p .tmp
+          mkdir -p /dev/shm/.tmp
           # 使用diffdocker导出去重后的tar
-          python diffdocker.py --tempdir .tmp save vllm/vllm-openai:v0.7.3 vllm:v0.8.5 -o image.tar
+          python diffdocker.py --tempdir /dev/shm/.tmp save vllm/vllm-openai:v0.7.3 vllm:v0.8.5 -o image.tar
 
           # 使用7z压缩
           7z a -t7z -mx9 image.7z image.tar
