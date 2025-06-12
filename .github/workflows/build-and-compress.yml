@@ -46,6 +46,9 @@ jobs:
           sz2=$(stat -c%s image.tar.gz)
           mkdir -p compressed-image
 
+          echo "Size of 7z: $sz1 bytes"
+          echo "Size of gz: $sz2 bytes"
+
           if [ $sz1 -le $sz2 ]; then
             echo "7z compression is smaller"
             rm image.tar.gz
