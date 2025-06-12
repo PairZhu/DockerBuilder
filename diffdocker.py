@@ -150,7 +150,7 @@ def main():
             diff_export(client, args.image1, args.image2, output_stream)
             print(f"去重导出完成，输出到: {args.output if args.output else 'STDOUT'}")
         except Exception as e:
-            print(f"Error: {e}", file=sys.stderr)
+            print(f"Error: {e}", flush=True)
             sys.exit(1)  # Move exit(1) here to ensure it only runs on error
         finally:
             if args.output:
