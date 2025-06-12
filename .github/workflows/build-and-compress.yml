@@ -1,0 +1,64 @@
+name: Build and Compress Docker Image
+
+on:
+  workflow_dispatch: # 手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install docker
+          sudo apt-get update
+          sudo apt-get install -y p7zip-full
+
+      - name: Build Docker image
+        run: |
+          # 先拉取基础镜像以便进行层去重
+          docker pull vllm/vllm-openai:v0.7.3
+          docker build -t vllm:v0.8.5 .
+
+      - name: Export and compress image
+        run: |
+          # 使用diffdocker导出去重后的tar
+          python diffdocker.py save vllm/vllm-openai:v0.7.3 vllm:v0.8.5 -o image.tar
+
+          # 使用7z压缩
+          7z a -t7z -mx9 image.7z image.tar
+
+          # 使用gzip压缩
+          gzip -9 < image.tar > image.tar.gz
+
+          # 删除原始tar文件
+          rm image.tar
+
+          # 获取文件大小并比较
+          sz1=$(stat -c%s image.7z)
+          sz2=$(stat -c%s image.tar.gz)
+          mkdir -p compressed-image
+
+          if [ $sz1 -le $sz2 ]; then
+            echo "7z compression is smaller"
+            rm image.tar.gz
+            mv image.7z compressed-image
+          else
+            echo "gz compression is smaller"
+            rm image.7z
+            mv image.tar.gz compressed-image
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: compressed-image
+          retention-days: 1
