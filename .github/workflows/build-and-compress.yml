@@ -6,7 +6,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
+    steps:      
+      - name: Show FileSystem Info
+        run: |
+          echo "Filesystem Info:"
+          df -h
+          pwd
+          ls -l
+          # 先报错退出
+          exit 1
+
       - uses: actions/checkout@v4
 
       - name: Set up Python
@@ -24,13 +33,6 @@ jobs:
       - uses: satackey/action-docker-layer-caching@v0.0.11
         # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
-      
-      - name: Show FileSystem Info
-        run: |
-          echo "Filesystem Info:"
-          df -h
-          # 先报错退出
-          exit 1
 
       - name: Build Docker image
         run: |
