@@ -12,21 +12,22 @@ VERSION = "1.0.0"
 def image_export(client, image_id, dst_path):
     """导出镜像到指定路径（已解压）"""
     try:
-        # 获取镜像的 tar 流
-        image_stream = client.api.get_image(image_id)
+        # 使用docker save命令导出
+        tmp_tar_path = os.path.join(dst_path, "image.tar")
+        cmd = ["docker", "save", "-o", tmp_tar_path, image_id]
+        print(f"执行命令: {' '.join(cmd)}")
 
-        # 创建临时 tar 文件
-        with tempfile.NamedTemporaryFile(delete=False) as tmp_tar:
-            print(f"导出镜像{image_id} 到临时文件: {tmp_tar.name}")
-            for chunk in image_stream:
-                tmp_tar.write(chunk)
-            tmp_tar_path = tmp_tar.name
+        import subprocess
 
-        # 解压到目标目录
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            raise Exception(f"docker save failed: {result.stderr}")
+
+        # 解压tar文件
         with tarfile.open(tmp_tar_path, "r") as tar:
             tar.extractall(dst_path)
 
-        # 清理临时文件
+        # 清理临时tar
         os.unlink(tmp_tar_path)
 
     except Exception as e:
