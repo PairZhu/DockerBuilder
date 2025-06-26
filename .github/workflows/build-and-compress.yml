@@ -17,6 +17,7 @@ jobs:
       # # 使用tmate进行调试
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
+      #   timeout-minutes: 30
 
       # # 提前终止
       # - name: Error step
