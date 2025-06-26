@@ -9,6 +9,21 @@ jobs:
     steps:      
       - uses: actions/checkout@v4
 
+      - name: Free Disk Space (Ubuntu) # 就是通过这一步进行释放空间
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # 这个可能会删除一些你实际需要的工具，所以建议还是 false 让它保留
+          # 如果你打算尝试移除它，可以再腾出大约6GB的空间
+          tool-cache: false
+
+          # 如果有你需要使用的，将其设置为 false ，比如这里我们要构建Docker，Docker相关的工具是不能删的
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: false
+          swap-storage: true
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
