@@ -59,6 +59,9 @@ jobs:
           # 使用diffdocker导出去重后的tar
           python diffdocker.py --tempdir /mnt/tmp save vllm/vllm-openai:v0.7.3 vllm:v0.9.1 -o image.tar
 
+          # 显示文件大小
+          echo "Size of image.tar: $(stat -c%s image.tar) bytes"
+
           # 使用7z压缩
           7z a -t7z -mx9 image.7z image.tar
 
