@@ -14,14 +14,14 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      # # 使用tmate进行调试
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
 
-      # 故意报错，提前终止
-      - name: Error step
-        run: |
-          echo "This step is intentionally failing to demonstrate error handling."
-          exit 1
+      # # 提前终止
+      # - name: Error step
+      #   run: |
+      #     exit 1
 
       - name: Install dependencies
         run: |
