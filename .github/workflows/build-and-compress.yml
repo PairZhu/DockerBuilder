@@ -27,10 +27,21 @@ jobs:
           pip install docker
           sudo apt-get update
           sudo apt-get install -y p7zip-full
-        
-      - uses: satackey/action-docker-layer-caching@v0.0.11
-        # Ignore the failure of a step and avoid terminating the job.
-        continue-on-error: true
+      
+      - name: Start frp tunnel
+        uses: cirunlabs/frp-tunnel-action@v1.2.0
+        with:
+          timeout_minutes: 1
+          frp_server: '{{ secrets.FRP_SERVER }}'
+          frp_token: '${{ secrets.FRP_TOKEN }}'
+          local_port: 22
+          remote_port: 6000
+
+      # 故意报错，提前终止
+      - name: Error step
+        run: |
+          echo "This step is intentionally failing to demonstrate error handling."
+          exit 1
 
       - name: Build Docker image
         run: |
