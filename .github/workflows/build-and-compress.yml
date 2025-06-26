@@ -56,10 +56,6 @@ jobs:
         run: |
           sudo mkdir -p /mnt/tmp
           sudo chmod 777 /mnt/tmp
-          # 软链接替代/var/lib/docker/tmp，防止硬盘空间不足
-          sudo mkdir -p /mnt/docker/tmp
-          sudo rm -rf /var/lib/docker/tmp
-          sudo ln -s /mnt/docker/tmp /var/lib/docker/tmp
           # 使用diffdocker导出去重后的tar
           python diffdocker.py --tempdir /mnt/tmp save vllm/vllm-openai:v0.7.3 vllm:v0.9.1 -o image.tar
 
