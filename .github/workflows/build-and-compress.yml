@@ -14,15 +14,15 @@ jobs:
         with:
           python-version: "3.10"
 
-      # 使用tmate进行调试
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        timeout-minutes: 30
+      # # 使用tmate进行调试
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   timeout-minutes: 30
 
-      # 提前终止
-      - name: Error step
-        run: |
-          exit 1
+      # # 提前终止
+      # - name: Error step
+      #   run: |
+      #     exit 1
 
       - name: Install dependencies
         run: |
@@ -43,6 +43,7 @@ jobs:
           sudo chmod 777 /mnt/tmp
           # 软链接替代/var/lib/docker/tmp，防止硬盘空间不足
           sudo mkdir -p /mnt/docker/tmp
+          sudo rm -rf /var/lib/docker/tmp
           sudo ln -s /mnt/docker/tmp /var/lib/docker/tmp
           # 使用diffdocker导出去重后的tar
           python diffdocker.py --tempdir /mnt/tmp save vllm/vllm-openai:v0.7.3 vllm:v0.9.1 -o image.tar
