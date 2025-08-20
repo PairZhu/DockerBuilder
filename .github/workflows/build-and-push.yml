@@ -9,20 +9,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Free Disk Space (Ubuntu) # 就是通过这一步进行释放空间
-        uses: jlumbroso/free-disk-space@main
-        with:
-          # 这个可能会删除一些你实际需要的工具，所以建议还是 false 让它保留
-          # 如果你打算尝试移除它，可以再腾出大约6GB的空间
-          tool-cache: false
+      # - name: Free Disk Space (Ubuntu) # 就是通过这一步进行释放空间
+      #   uses: jlumbroso/free-disk-space@main
+      #   with:
+      #     # 这个可能会删除一些你实际需要的工具，所以建议还是 false 让它保留
+      #     # 如果你打算尝试移除它，可以再腾出大约6GB的空间
+      #     tool-cache: false
 
-          # 如果有你需要使用的，将其设置为 false ，比如这里我们要构建Docker，Docker相关的工具是不能删的
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: false
-          swap-storage: true
+      #     # 如果有你需要使用的，将其设置为 false ，比如这里我们要构建Docker，Docker相关的工具是不能删的
+      #     android: true
+      #     dotnet: true
+      #     haskell: true
+      #     large-packages: true
+      #     docker-images: false
+      #     swap-storage: true
 
       # # 使用tmate进行调试
       # - name: Setup tmate session
@@ -36,7 +36,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t mineru-sglang:latest -f Dockerfile .
+          docker build -t temp:latest -f Dockerfile .
 
       
       - name: Login to Aliyun Container Registry
@@ -49,5 +49,5 @@ jobs:
 
       - name: Push Docker image to Aliyun Container Registry
         run: |
-          docker tag mineru-sglang:latest registry.cn-hangzhou.aliyuncs.com/main_name_space/main_name:mineru
-          docker push registry.cn-hangzhou.aliyuncs.com/main_name_space/main_name:mineru
+          docker tag temp:latest registry.cn-hangzhou.aliyuncs.com/main_name_space/main_name:gitlab-runner-ubuntu-24.04
+          docker push registry.cn-hangzhou.aliyuncs.com/main_name_space/main_name:gitlab-runner-ubuntu-24.04
