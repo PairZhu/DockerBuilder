@@ -1,3 +1,5 @@
+python-install-mirror = "https://ghfast.top/https://github.com/astral-sh/python-build-standalone/releases/download"
+
 [[index]]
 url = "https://mirrors.aliyun.com/pypi/simple/"
 default = true
