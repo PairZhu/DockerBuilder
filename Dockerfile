@@ -13,12 +13,12 @@ RUN apt-get update && apt-get install -y \
     ca-certificates && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# 安装 Docker in Docker (DinD)
+# 安装 Docker CLI（不包含 Docker 服务端）
 RUN mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
         > /etc/apt/sources.list.d/docker.list && \
-    apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    apt-get update && apt-get install -y docker-ce-cli
 
 # 安装 uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/bin" sh
@@ -31,5 +31,3 @@ RUN mkdir -p /etc/docker && \
     chmod 644 /etc/docker/daemon.json
 
 VOLUME /var/lib/docker
-
-ENTRYPOINT ["nohup", "dockerd", "&", "bash"]
