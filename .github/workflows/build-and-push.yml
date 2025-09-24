@@ -49,5 +49,5 @@ jobs:
 
       - name: Push Docker image to Aliyun Container Registry
         run: |
-          docker tag temp:latest registry.cn-hangzhou.aliyuncs.com/main_name_space/main_name:gitlab-runner-ubuntu-24.04
-          docker push registry.cn-hangzhou.aliyuncs.com/main_name_space/main_name:gitlab-runner-ubuntu-24.04
+          docker tag temp:latest registry.cn-hangzhou.aliyuncs.com/main_name_space/main_name:vllm-0.9.1
+          docker push registry.cn-hangzhou.aliyuncs.com/main_name_space/main_name:vllm-0.9.1
